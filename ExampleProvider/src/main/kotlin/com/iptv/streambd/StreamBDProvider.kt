@@ -81,7 +81,6 @@ class StreamBDProvider : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         return try {
-            // M3U এর কাস্টম ইউআরএল প্যারামিটার পার্স করা (যেমন: URL|User-Agent=...)
             val parsedInput = parseUrlHeadersAndCustom(data)
             
             val resolved = resolveTokenForUrl(
@@ -94,6 +93,8 @@ class StreamBDProvider : MainAPI() {
             )
 
             if (resolved != null) {
+                val isM3u8Link = resolved.url.contains(".m3u8", ignoreCase = true)
+                // ExtractorLink এর নতুন কনস্ট্রাক্টর
                 callback.invoke(
                     ExtractorLink(
                         source = this.name,
@@ -101,9 +102,19 @@ class StreamBDProvider : MainAPI() {
                         url = resolved.url,
                         referer = resolved.headers?.get("Referer") ?: resolved.url.substringBefore("/"),
                         quality = Qualities.Unknown.value,
-                        isM3u8 = resolved.url.contains(".m3u8") || resolved.url.contains(".mpd"),
-                        headers = resolved.headers ?: emptyMap(),
-                        drm = resolved.drm
+                        isM3u8 = isM3u8Link
+                        // headers এবং অন্যান্য ফিল্ড আপাতত বাদ দিলাম যাতে কনস্ট্রাক্টর কনফ্লিক্ট না করে
+                    )
+                )
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
                     )
                 )
                 true
