@@ -1,7 +1,7 @@
 cloudstream {
-    setPluginId("StreamBDPlugin")
-    setPluginName("StreamBD IPTV")
-    setPluginClass("com.iptv.streambd.StreamBDPlugin")
-    setPluginVersion(1)
-    setDescription("StreamBD IPTV Extension with Token Parser")
+    pluginId = "StreamBDPlugin"
+    pluginName = "StreamBD IPTV"
+    pluginClass = "com.iptv.streambd.StreamBDPlugin"
+    pluginVersion = 1
+    description = "StreamBD IPTV Extension with Token Parser"
 }
